@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Stop writing model catalog warnings directly to the console, which can corrupt the host TUI. Diagnostics remain available through `/commandcode-status`.
+
 ## 0.7.1 - 2026-09-18
 
 - Normalize nullable type arrays for `google/gemini-*` tools on the generate transport to avoid the gateway's `any_of` validation error, preserving required fields, literal data, and schemas for unrelated models (#99, #103).

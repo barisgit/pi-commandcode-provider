@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Stop writing model catalog warnings directly to the console, which can corrupt the host TUI. Diagnostics remain available through `/commandcode-status`.
+- Recognize image input and native reasoning for Xiaomi MiMo V2.6 Flash, Pro, and Pro UltraSpeed. Keep configurable thinking efforts unavailable: Command Code does not publish supported controls for these models.
 
 ## 0.7.1 - 2026-09-18
 

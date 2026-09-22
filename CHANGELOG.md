@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Recognize image input and native reasoning for Xiaomi MiMo V2.6 Flash, Pro, and Pro UltraSpeed. Keep configurable thinking efforts unavailable: Command Code does not publish supported controls for these models.
+
 ## 0.7.1 - 2026-09-18
 
 - Normalize nullable type arrays for `google/gemini-*` tools on the generate transport to avoid the gateway's `any_of` validation error, preserving required fields, literal data, and schemas for unrelated models (#99, #103).

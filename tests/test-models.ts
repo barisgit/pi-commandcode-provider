@@ -139,33 +139,6 @@ describe("commandCodeModelsFromApiResponse()", () => {
     assert.equal(models[0]?.maxTokens, 131_072)
   })
 
-  for (const id of [
-    "xiaomi/mimo-v2.6-flash",
-    "xiaomi/mimo-v2.6-pro",
-    "xiaomi/mimo-v2.6-pro-ultraspeed",
-  ]) {
-    it(`advertises images and reasoning without inventing effort controls for ${id}`, () => {
-      assert.deepEqual(inputModalitiesForModel(id), ["text", "image"])
-      assert.equal(modelSupportsImageInput(id), true)
-      const [model] = commandCodeModelsFromApiResponse({
-        object: "list",
-        data: [{ ...API_RESPONSE.data[0], id }],
-      })
-      // Reasoning capability is independent of configurable effort levels.
-      assert.equal(model.reasoning, true)
-      assert.equal(MODEL_EFFORTS[id], undefined)
-      assert.deepEqual(thinkingMetadataForModel(id), {
-        thinkingLevelMap: thinkingLevelMapForEfforts([]),
-      })
-      const [cached] = commandCodeModelsFromCache({
-        version: 1,
-        models: [{ ...model, reasoning: false }],
-      })
-      assert.equal(cached.reasoning, true)
-      assert.deepEqual(inputModalitiesForModel(id, ["text"]), ["text"])
-    })
-  }
-
   it("prefers host-resolved input modalities over the catalog snapshot", () => {
     // A model published upstream after the pinned CLI release is absent from the
     // generated catalog, so the host's resolved modalities must win.

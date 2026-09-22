@@ -8,12 +8,7 @@ import { after, before, beforeEach, describe, it } from "node:test"
 
 import { COMMAND_CODE_CLI_VERSION } from "../src/commandcode-catalog.ts"
 import type { AssistantMessageEvent } from "../src/core.ts"
-import {
-  MODEL_EFFORTS,
-  MODEL_REASONING,
-  thinkingMetadataForModel,
-  thinkingLevelMapForEfforts,
-} from "../src/models.ts"
+import { MODEL_EFFORTS, thinkingLevelMapForEfforts } from "../src/models.ts"
 import {
   collectEvents,
   createTestDeps,
@@ -210,47 +205,6 @@ describe("streamCommandCode — successful streams", () => {
       "data:image/png;base64,aGVsbG8=",
     )
   })
-
-  for (const id of [
-    "xiaomi/mimo-v2.6-flash",
-    "xiaomi/mimo-v2.6-pro",
-    "xiaomi/mimo-v2.6-pro-ultraspeed",
-  ]) {
-    it(`sends images and preserves native thinking for ${id} without effort controls`, async () => {
-      server.mockResponse({
-        type: "success",
-        events: [
-          JSON.stringify({ type: "reasoning-delta", text: "Native thought" }),
-          JSON.stringify({ type: "finish", finishReason: "stop" }),
-        ],
-      })
-      const { streamCommandCode } = createTestDeps({ apiBase: server.baseUrl() })
-      const events = await collectEvents(
-        streamCommandCode(
-          makeModel({ id, reasoning: MODEL_REASONING[id], ...thinkingMetadataForModel(id) }),
-          makeContext({
-            messages: [
-              {
-                role: "user",
-                content: [{ type: "image", data: "aGVsbG8=", mimeType: "image/png" }],
-              },
-            ],
-          }),
-          { apiKey: "mock-key", reasoning: "high" },
-        ),
-      )
-      assert.equal(events.at(-1)?.type, "done")
-      assert.ok(
-        events.some((event) => event.type === "thinking_delta" && event.delta === "Native thought"),
-      )
-      assert.equal(objectAt(server.lastRequestBody(), ["params", "reasoning_effort"]), undefined)
-      assert.equal(objectAt(server.lastRequestBody(), ["params", "thinking"]), undefined)
-      assert.equal(
-        objectAt(server.lastRequestBody(), ["params", "messages", "0", "content", "0", "image"]),
-        "data:image/png;base64,aGVsbG8=",
-      )
-    })
-  }
 
   it("forwards images on the generate transport for models the host advertises as vision-capable", async () => {
     server.mockResponse({

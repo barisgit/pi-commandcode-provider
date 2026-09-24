@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Send pi's system prompt and tool declarations on the `/alpha/generate` fallback with pi 0.86+, which moved them into transcript system messages. Plans without Provider API access use this transport, where models wrote tool calls as plain text instead of calling tools (#108, #109, #110).
 - Stop writing model catalog warnings directly to the console, which can corrupt the host TUI. Diagnostics remain available through `/commandcode-status`.
 
 ## 0.7.1 - 2026-09-18
